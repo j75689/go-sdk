@@ -54,6 +54,8 @@ type TransactionClient interface {
 	ListMiniPair(baseAssetSymbol string, quoteAssetSymbol string, initPrice int64, sync bool, options ...Option) (*ListMiniPairResult, error)
 	SetURI(symbol, tokenURI string, sync bool, options ...Option) (*SetUriResult, error)
 
+	BroadcastMsg(m msg.Msg, sync bool, options ...Option) (*tx.TxCommitResult, error)
+
 	GetKeyManager() keys.KeyManager
 }
 
@@ -70,6 +72,10 @@ func NewClient(chainId string, keyManager keys.KeyManager, queryClient query.Que
 
 func (c *client) GetKeyManager() keys.KeyManager {
 	return c.keyManager
+}
+
+func (c *client) BroadcastMsg(m msg.Msg, sync bool, options ...Option) (*tx.TxCommitResult, error) {
+	return c.broadcastMsg(m, sync, options...)
 }
 
 func (c *client) broadcastMsg(m msg.Msg, sync bool, options ...Option) (*tx.TxCommitResult, error) {
